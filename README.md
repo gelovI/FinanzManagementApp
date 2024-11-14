@@ -42,22 +42,28 @@ Falls du das Projekt lokal testen möchtest:
    git clone https://github.com/username/finanzmanagement-app.git
    
 2. Wechsle in das Projektverzeichnis:
+   ```bash
    cd finanzmanagement-app
    
 3. Installiere Abhängigkeiten:
+   ```bash
    composer install
    npm install
 
 4. Kopiere die .env-Datei und passe sie an:
+   ```bash
    cp .env.example .env
 
 5. Generiere den App-Key:
+   ```bash
    php artisan key:generate
 
 6. Führe die Datenbankmigrationen aus:
+    ```bash
    php artisan migrate
 
 7. Starte den lokalen Server:
+    ```bash
    php artisan serve
 
 📜 Lizenz
