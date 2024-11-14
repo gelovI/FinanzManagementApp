@@ -19,7 +19,7 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($incomes as $income)
                 <tr>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $income->date }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">@formatDate($income->date)</td>
                     <td class="px-6 py-4 text-sm text-gray-900">€ {{ number_format($income->amount, 2) }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $income->category->name }}</td>
                     <td class="px-6 py-4 text-sm text-gray-900">{{ $income->description }}</td>

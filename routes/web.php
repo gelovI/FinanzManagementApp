@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Income;
 use App\Models\Expense;
 use App\Models\SavingsPlan;
+use App\Models\Category;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,7 +31,13 @@ require __DIR__ . '/auth.php';
 Route::resource('incomes', IncomeController::class);
 Route::resource('expenses', ExpenseController::class);
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', function () {
+    $categories = Category::all();
+    $totalIncome = Income::where('user_id', Auth::id())->sum('amount');
+    $totalExpense = Expense::where('user_id', Auth::id())->sum('amount');
+    return view('dashboard', compact('categories', 'totalIncome', 'totalExpense'));
+})->name('dashboard');
+
 
 Route::get('/dashboard', function (Request $request) {
     $filterDays = $request->query('filter');

@@ -29,21 +29,35 @@
             </div>
 
             <!-- Schnellzugriffe -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6" x-data="{ showIncomeForm: false, showExpenseForm: false }">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-bold">Schnellzugriff</h3>
                     <div class="mt-4 flex space-x-4">
-                        <a href="{{ route('incomes.create') }}" class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Einnahme hinzufügen</a>
-                        <a href="{{ route('expenses.create') }}" class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600">Ausgabe hinzufügen</a>
+                        <!-- Buttons zum Anzeigen der Formulare -->
+                        <button
+                            class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
+                            @click="showIncomeForm = !showIncomeForm; showExpenseForm = false">
+                            Einnahme hinzufügen
+                        </button>
+                        <button
+                            class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600"
+                            @click="showExpenseForm = !showExpenseForm; showIncomeForm = false">
+                            Ausgabe hinzufügen
+                        </button>
                     </div>
 
-                    <!-- Links zu Einnahmen und Ausgaben -->
-                    <div class="mt-6 flex space-x-4">
-                        <a href="{{ route('incomes.index') }}" class="text-blue-500 underline hover:text-blue-700">Alle Einnahmen anzeigen</a>
-                        <a href="{{ route('expenses.index') }}" class="text-blue-500 underline hover:text-blue-700">Alle Ausgaben anzeigen</a>
+                    <!-- Formular für Einnahmen -->
+                    <div x-show="showIncomeForm" class="mt-6" x-cloak>
+                        @include('incomes.create') <!-- Bindet die bestehende View ein -->
+                    </div>
+
+                    <!-- Formular für Ausgaben -->
+                    <div x-show="showExpenseForm" class="mt-6" x-cloak>
+                        @include('expenses.create') <!-- Bindet die bestehende View ein -->
                     </div>
                 </div>
             </div>
+
 
 
             <!-- Letzte Transaktionen -->
@@ -74,7 +88,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($recentTransactions as $transaction)
                                 <tr>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $transaction->date }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">@formatDate($transaction->date)</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $transaction->category->name }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900 text-right">€ {{ number_format($transaction->amount, 2) }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $transaction->description }}</td>
@@ -82,25 +96,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sparpläne -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-bold">Sparpläne</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                        @foreach($savingsPlans as $plan)
-                        <div class="bg-gray-100 p-4 rounded-lg shadow">
-                            <h4 class="text-lg font-semibold">{{ $plan->name }}</h4>
-                            <p class="text-sm text-gray-600">Ziel: € {{ number_format($plan->target_amount, 2) }}</p>
-                            <p class="text-sm text-gray-600">Aktuell: € {{ number_format($plan->current_amount, 2) }}</p>
-                            <div class="bg-gray-200 h-2 mt-2">
-                                <div class="bg-blue-500 h-2" style="width: 50%"></div>
-                            </div>
-                        </div>
-                        @endforeach
                     </div>
                 </div>
             </div>
