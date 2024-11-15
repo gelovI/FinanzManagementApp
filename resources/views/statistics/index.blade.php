@@ -1,28 +1,49 @@
 <x-app-layout>
+    <style>
+        [x-cloak] {
+            display: none;
+        }
+
+        /* Begrenzung der Höhe der Diagramme */
+        .chart-container {
+            height: calc(50vh - 3rem); /* Dynamische Höhe, passt sich an die Hälfte des Bildschirms an */
+        }
+    </style>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Statistiken') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Gesamteinnahmen und Ausgaben -->
-            <div class="bg-white shadow-sm sm:rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-bold">Einnahmen vs. Ausgaben</h3>
-                <canvas id="incomeExpenseChart" class="mt-4"></canvas>
-            </div>
+            <!-- Statistiken Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Linke Seite: Einnahmen vs. Ausgaben -->
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">Einnahmen vs. Ausgaben</h3>
+                    <div class="chart-container">
+                        <canvas id="incomeExpenseChart"></canvas>
+                    </div>
+                </div>
 
-            <!-- Fortschritt der Sparpläne -->
-            <div class="bg-white shadow-sm sm:rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-bold">Fortschritt der Sparpläne</h3>
-                <canvas id="savingsChart" class="mt-4"></canvas>
-            </div>
-
-            <!-- Ausgaben nach Kategorien -->
-            <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-bold">Ausgaben nach Kategorien</h3>
-                <canvas id="categoryChart" class="mt-4"></canvas>
+                <!-- Rechte Seite: Sparziele und Ausgaben nach Kategorien -->
+                <div class="grid grid-rows-2 gap-4">
+                    <!-- Sparziele Fortschritt -->
+                    <div class="bg-white shadow-sm sm:rounded-lg p-4">
+                        <h3 class="text-lg font-bold mb-2">Sparziele</h3>
+                        <div class="chart-container">
+                            <canvas id="savingsChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Ausgaben nach Kategorien -->
+                    <div class="bg-white shadow-sm sm:rounded-lg p-4">
+                        <h3 class="text-lg font-bold mb-2">Ausgaben nach Kategorien</h3>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
