@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+
 
 class SavingsPlan extends Model
 {
@@ -13,10 +15,7 @@ class SavingsPlan extends Model
         'user_id',
         'name',
         'target_amount',
-        'current_amount',
-        'start_date',
-        'end_date',
-        'description',
+        'current_amount'
     ];
 
     public function user()

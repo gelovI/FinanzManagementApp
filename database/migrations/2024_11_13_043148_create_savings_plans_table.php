@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('target_amount', 10, 2);
             $table->decimal('current_amount', 10, 2)->default(0);
-            $table->date('start_date')->nullable(); // Optionales Feld
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

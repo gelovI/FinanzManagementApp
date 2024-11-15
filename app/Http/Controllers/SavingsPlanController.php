@@ -8,6 +8,14 @@ use App\Models\SavingsPlan;
 
 class SavingsPlanController extends Controller
 {
+    public function index()
+    {
+        $savingsPlans = SavingsPlan::where('user_id', Auth::id())->get();
+        $totalTargetAmount = $savingsPlans->sum('target_amount');
+        $totalCurrentAmount = $savingsPlans->sum('current_amount');
+
+        return view('savings.index', compact('savingsPlans', 'totalTargetAmount', 'totalCurrentAmount'));
+    }
 
     public function store(Request $request)
     {
@@ -15,9 +23,6 @@ class SavingsPlanController extends Controller
             'name' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0',
             'current_amount' => 'nullable|numeric|min:0',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'description' => 'nullable|string',
         ]);
 
         SavingsPlan::create([
@@ -25,12 +30,9 @@ class SavingsPlanController extends Controller
             'name' => $request->name,
             'target_amount' => $request->target_amount,
             'current_amount' => $request->current_amount ?? 0,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'description' => $request->description,
         ]);
 
-        return redirect()->route('savings_plans.index')->with('success', 'Sparplan erfolgreich erstellt.');
+        return redirect()->route('savings.index')->with('success', 'Sparplan erfolgreich erstellt.');
     }
 
     public function update(Request $request, SavingsPlan $savingsPlan)
@@ -39,20 +41,18 @@ class SavingsPlanController extends Controller
             'name' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0',
             'current_amount' => 'nullable|numeric|min:0',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'description' => 'nullable|string',
         ]);
 
-        $savingsPlan->update($request->all());
+        $savingsPlan->update($request->only('name', 'target_amount', 'current_amount'));
 
-        return redirect()->route('savings_plans.index')->with('success', 'Sparplan erfolgreich aktualisiert.');
+        return redirect()->route('savings.index')->with('success', 'Sparplan erfolgreich aktualisiert.');
     }
+
 
     public function destroy(SavingsPlan $savingsPlan)
     {
         $savingsPlan->delete();
 
-        return redirect()->route('savings_plans.index')->with('success', 'Sparplan erfolgreich gelöscht.');
+        return redirect()->route('savings.index')->with('success', 'Sparplan erfolgreich gelöscht.');
     }
 }

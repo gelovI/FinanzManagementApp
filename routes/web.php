@@ -6,6 +6,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ExpenseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Controllers\SavingsPlanController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Income;
 use App\Models\Expense;
@@ -80,7 +81,14 @@ Route::get('/dashboard', function (Request $request) {
         ->sortByDesc('date')
         ->values();
 
-    $savingsPlans = SavingsPlan::where('user_id', Auth::id())->get();
-
-    return view('dashboard', compact('totalIncome', 'totalExpense', 'recentTransactions', 'savingsPlans'));
+    return view('dashboard', compact('totalIncome', 'totalExpense', 'recentTransactions'));
 })->name('dashboard');
+
+Route::get('/savings-plans', [SavingsPlanController::class, 'index'])->name('savings.index');
+Route::post('/savings-plans', [SavingsPlanController::class, 'store'])->name('savings.store');
+Route::resource('savings', SavingsPlanController::class);
+Route::put('/savings-plans/{savingsPlan}', [SavingsPlanController::class, 'update'])->name('savings.update');
+Route::delete('/savings-plans/{savingsPlan}', [SavingsPlanController::class, 'destroy'])->name('savings.destroy');
+
+
+
