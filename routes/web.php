@@ -7,6 +7,7 @@ use App\Http\Controllers\ExpenseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SavingsPlanController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Income;
 use App\Models\Expense;
@@ -90,5 +91,9 @@ Route::resource('savings', SavingsPlanController::class);
 Route::put('/savings-plans/{savingsPlan}', [SavingsPlanController::class, 'update'])->name('savings.update');
 Route::delete('/savings-plans/{savingsPlan}', [SavingsPlanController::class, 'destroy'])->name('savings.destroy');
 
-
-
+Route::get('/statistics/savings', [StatisticsController::class, 'savingsStatistics']);
+Route::get('/statistics/income-expense', [StatisticsController::class, 'incomeExpenseStatistics']);
+Route::get('/statistics/categories', [StatisticsController::class, 'categoryStatistics']);
+Route::get('/statistics', function () {
+    return view('statistics.index');
+})->name('statistics.index');
