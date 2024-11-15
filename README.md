@@ -20,8 +20,8 @@ Hier sind einige Bereiche, an denen derzeit gearbeitet wird:
 - [x] Authentifizierung und Benutzerverwaltung
 - [x] Einnahmen- und Ausgabenlogik
 - [x] Dashboard mit Übersicht
-- [ ] Erweiterte Filter- und Suchfunktionen
-- [ ] Sparpläne und Fortschrittsanzeigen
+- [x] Erweiterte Filter- und Suchfunktionen
+- [x] Sparpläne und Fortschrittsanzeigen
 - [ ] Diagramme und Berichte
 
 ## 💻 Technologien
