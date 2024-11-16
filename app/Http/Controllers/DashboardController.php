@@ -7,35 +7,49 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Income;
 use App\Models\Expense;
+use App\Models\Category;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Filter abrufen
-        $filter = $request->get('filter');
-        dd($filter);
-        $queryDate = now();
+        // Gesamteinnahmen und -ausgaben
+        $totalIncome = Income::where('user_id', Auth::id())->sum('amount');
+        $totalExpense = Expense::where('user_id', Auth::id())->sum('amount');
 
-        if ($filter) {
-            $days = (int) $filter;
-            $queryDate = now()->subDays($days);
-        }
+        // Kategorien für Einnahmen und Ausgaben
+        $categories = Category::all();
 
-        $incomes = Income::where('user_id', Auth::id())
-            ->where('date', '>=', $queryDate)
-            ->select('amount', 'category_id', 'date', 'description', 'id', DB::raw("'income' as type"))
-            ->with('category')
+        $filterDays = $request->get('filter');
+
+        // Berechne Filterdatum
+        $queryDate = $filterDays ? now()->subDays($filterDays) : null;
+
+        // Gesamteinnahmen
+        $totalIncome = Income::where('user_id', Auth::id())
+            ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
+            ->sum('amount');
+
+        // Gesamtausgaben
+        $totalExpense = Expense::where('user_id', Auth::id())
+            ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
+            ->sum('amount');
+
+        // Kategorien
+        $categories = Category::all();
+
+        // Einnahmen und Ausgaben abrufen
+        $recentIncomes = Income::where('user_id', Auth::id())
+            ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->get();
 
-        $expenses = Expense::where('user_id', Auth::id())
-            ->where('date', '>=', $queryDate)
-            ->select('amount', 'category_id', 'date', 'description', 'id', DB::raw("'expense' as type"))
-            ->with('category')
+        $recentExpenses = Expense::where('user_id', Auth::id())
+            ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->get();
 
-        $transactions = $incomes->merge($expenses)->sortByDesc('date');
+        // Letzte Transaktionen kombinieren
+        $transactions = $recentIncomes->merge($recentExpenses)->sortByDesc('date');
 
-        return view('dashboard', compact('transactions'));
+        return view('dashboard', compact('transactions', 'totalIncome', 'totalExpense', 'categories', 'recentIncomes', 'recentExpenses'));
     }
 }

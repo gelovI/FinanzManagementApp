@@ -48,12 +48,12 @@
 
                     <!-- Formular für Einnahmen -->
                     <div x-show="showIncomeForm" class="mt-6" x-cloak>
-                        @include('incomes.create') <!-- Bindet die bestehende View ein -->
+                        @include('incomes.create', ['categories' => $categories])
                     </div>
 
                     <!-- Formular für Ausgaben -->
                     <div x-show="showExpenseForm" class="mt-6" x-cloak>
-                        @include('expenses.create') <!-- Bindet die bestehende View ein -->
+                        @include('expenses.create', ['categories' => $categories])
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($recentTransactions as $transaction)
+                                @foreach($transactions as $transaction)
                                 <tr>
                                     <td class="px-6 py-4 text-sm text-gray-900">@formatDate($transaction->date)</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $transaction->category->name }}</td>
