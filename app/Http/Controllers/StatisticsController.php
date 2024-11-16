@@ -48,4 +48,32 @@ class StatisticsController extends Controller
 
         return response()->json($expensesByCategory);
     }
+
+    public function getMonthlyIncomeExpense()
+    {
+        $currentYear = now()->year;
+
+        // Gruppiere Einnahmen nach Monat
+        $income = Income::selectRaw('MONTH(date) as month, SUM(amount) as total')
+            ->whereYear('date', $currentYear)
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        // Gruppiere Ausgaben nach Monat
+        $expense = Expense::selectRaw('MONTH(date) as month, SUM(amount) as total')
+            ->whereYear('date', $currentYear)
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        // Erstelle die Datenstruktur für alle Monate
+        $months = collect(range(1, 12))->map(function ($month) use ($income, $expense) {
+            return [
+                'month' => $month,
+                'income' => $income[$month] ?? 0, // Einnahmen für den Monat oder 0
+                'expense' => $expense[$month] ?? 0, // Ausgaben für den Monat oder 0
+            ];
+        });
+
+        return response()->json($months);
+    }
 }

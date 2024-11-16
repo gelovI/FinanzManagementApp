@@ -81,8 +81,9 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Datum</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategorie</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Betrag</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Beschreibung</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Betrag</th>
+
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -90,8 +91,9 @@
                                 <tr>
                                     <td class="px-6 py-4 text-sm text-gray-900">@formatDate($transaction->date)</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $transaction->category->name }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 text-right">€ {{ number_format($transaction->amount, 2) }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">{{ $transaction->description }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900 text-right">€ {{ number_format($transaction->amount, 2) }}</td>
+
                                 </tr>
                                 @endforeach
                             </tbody>

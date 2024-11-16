@@ -97,3 +97,4 @@ Route::get('/statistics/categories', [StatisticsController::class, 'categoryStat
 Route::get('/statistics', function () {
     return view('statistics.index');
 })->name('statistics.index');
+Route::get('/statistics/monthly-income-expense', [StatisticsController::class, 'getMonthlyIncomeExpense']);
