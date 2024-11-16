@@ -39,7 +39,7 @@ Falls du das Projekt lokal testen möchtest:
 
 1. Klone das Repository:
    ```bash
-   git clone https://github.com/username/finanzmanagement-app.git
+   git clone https://github.com/gelovI/FinanzManagementApp
    
 2. Wechsle in das Projektverzeichnis:
    ```bash
