@@ -39,32 +39,27 @@ class IncomeController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('incomes.index')->with('success', 'Einnahme erfolgreich erstellt.');
-    }
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
-    {
-        $categories = Category::where('type', 'income')->get();
-        return view('incomes.edit', compact('income', 'categories'));
+        return redirect()->route('dashboard.transactions')->with('success', 'Einnahme erfolgreich erstellt.');
     }
 
     public function update(Request $request, Income $income)
     {
         $request->validate([
-            'amount' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
             'date' => 'required|date',
+            'category_id' => 'required|exists:categories,id',
+            'amount' => 'required|numeric',
             'description' => 'nullable|string|max:255',
         ]);
 
         $income->update($request->all());
 
-        return redirect()->route('incomes.index')->with('success', 'Einnahme erfolgreich aktualisiert.');
+        return redirect()->back()->with('success', 'Einnahme erfolgreich aktualisiert!');
+    }
+
+    public function edit($id)
+    {
+        // Für Benutzer, die die URL direkt aufrufen.
+        return redirect()->route('reports.index');
     }
 
     public function destroy(Income $income)

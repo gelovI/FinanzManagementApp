@@ -40,6 +40,20 @@ class ExpenseController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('expenses.index')->with('success', 'Ausgabe erfolgreich erstellt.');
+        return redirect()->route('dashboard.transactions')->with('success', 'Ausgabe erfolgreich erstellt.');
+    }
+
+    public function update(Request $request, Expense $expense)
+    {
+        $request->validate([
+            'date' => 'required|date',
+            'category_id' => 'required|exists:categories,id',
+            'amount' => 'required|numeric',
+            'description' => 'nullable|string|max:255',
+        ]);
+
+        $expense->update($request->all());
+
+        return redirect()->back()->with('success', 'Einnahme erfolgreich aktualisiert!');
     }
 }

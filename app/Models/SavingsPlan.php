@@ -22,4 +22,16 @@ class SavingsPlan extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($plan) {
+            // Benachrichtigungen löschen, die sich auf diesen Sparplan beziehen
+            Notification::where('user_id', $plan->user_id)
+                ->where('message', 'like', 'Ihr Sparplan "' . $plan->name . '"%')
+                ->delete();
+        });
+    }
 }
