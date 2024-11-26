@@ -12,8 +12,8 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $incomes = Income::with('category')->get();
-        $expenses = Expense::with('category')->get();
+        $incomes = Income::orderBy('date', 'desc')->get();
+        $expenses = Expense::orderBy('date', 'desc')->get();
         $categories = Category::all();
 
         return view('reports.index', compact('incomes', 'expenses', 'categories'));

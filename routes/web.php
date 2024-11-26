@@ -65,11 +65,11 @@ Route::get('/notifications', function () {
     $balance = $totalIncome - $totalExpense;
 
     // Prüfen: Kontostand unter 15%
-    if ($totalIncome > 0 && $balance / $totalIncome < 0.15) {
+    if ($balance <= 300) {
         Notification::updateOrCreate(
             [
                 'user_id' => $userId,
-                'message' => 'Ihr Kontostand ist unter 15% des Gesamteinkommens gefallen.',
+                'message' => 'Ihr Kontostand ist unter 300 Euro gefallen.',
             ],
             [
                 'is_read' => false,

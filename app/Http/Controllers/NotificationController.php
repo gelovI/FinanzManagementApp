@@ -34,7 +34,7 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Benachrichtigung erfolgreich erstellt.', 'notification' => $notification]);
     }
 
-    public function markAsRead()
+    public function markAsRead(Request $request)
     {
         $userId = Auth::id();
 
@@ -42,6 +42,11 @@ class NotificationController extends Controller
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
-        return response()->json(['message' => "$updatedRows Benachrichtigungen als gelesen markiert."]);
+        Notification::where('user_id', $userId)
+            ->where('message', 'LIKE', 'Ihr Kontostand ist unter%')
+            ->where('is_read', true)
+            ->delete();
+
+        return response()->json(['message' => "$updatedRows Benachrichtigungen als gelesen markiert und gelöscht."]);
     }
 }
