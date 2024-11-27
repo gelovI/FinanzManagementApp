@@ -35,12 +35,12 @@
                     <div class="mt-4 flex space-x-4">
                         <!-- Buttons zum Anzeigen der Formulare -->
                         <button
-                            class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
+                            class="bg-green-300 text-white px-4 py-2 rounded shadow hover:bg-green-500"
                             @click="showIncomeForm = !showIncomeForm; showExpenseForm = false">
                             Einnahme hinzufügen
                         </button>
                         <button
-                            class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600"
+                            class="bg-red-300 text-white px-4 py-2 rounded shadow hover:bg-red-500"
                             @click="showExpenseForm = !showExpenseForm; showIncomeForm = false">
                             Ausgabe hinzufügen
                         </button>

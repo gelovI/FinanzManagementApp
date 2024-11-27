@@ -57,7 +57,7 @@
                                     </svg>
                                 </button>
                                 <!-- Löschen Button -->
-                                <form action="{{ route('incomes.destroy', $income->id) }}" method="POST">
+                                <form action="{{ route('incomes.destroy', $income->id) }}" method="POST" onsubmit="return confirm('Möchten Sie diese Einnahme wirklich löschen?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:underline">
@@ -136,7 +136,7 @@
                                     </svg>
                                 </button>
                                 <!-- Löschen Button -->
-                                <form action="{{ route('expenses.destroy', $expense->id) }}" method="POST">
+                                <form action="{{ route('expenses.destroy', $expense->id) }}" method="POST" onsubmit="return confirm('Möchten Sie diese Ausgabe wirklich löschen?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:underline">
