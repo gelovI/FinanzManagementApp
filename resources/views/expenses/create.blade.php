@@ -7,14 +7,11 @@
     </div>
     <div class="mb-4">
         <label for="category" class="block text-sm font-medium text-gray-700">Kategorie</label>
-        <select name="category_id" id="category" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-            @if(isset($categories) && !$categories->isEmpty())
-            @foreach ($categories as $category)
+        <select name="category_id" id="expense_category" class="w-full border rounded px-2 py-1">
+            <option value="" disabled selected>Kategorie wählen</option>
+            @foreach ($expenseCategories as $category)
             <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
-            @else
-            <option value="">Keine Kategorien verfügbar</option>
-            @endif
         </select>
     </div>
     <div class="mb-4">

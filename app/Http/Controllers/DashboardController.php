@@ -15,30 +15,27 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Gesamteinnahmen und -ausgaben
+        // Gesamteinnahmen und -ausgaben berechnen
         $totalIncome = Income::where('user_id', Auth::id())->sum('amount');
         $totalExpense = Expense::where('user_id', Auth::id())->sum('amount');
 
-        // Kategorien für Einnahmen und Ausgaben
-        $categories = Category::all();
-
+        // Filter für Tage
         $filterDays = $request->get('filter');
-
-        // Berechne Filterdatum
         $queryDate = $filterDays ? now()->subDays($filterDays) : null;
 
-        // Gesamteinnahmen
+        // Gesamteinnahmen basierend auf dem Filterdatum
         $totalIncome = Income::where('user_id', Auth::id())
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->sum('amount');
 
-        // Gesamtausgaben
+        // Gesamtausgaben basierend auf dem Filterdatum
         $totalExpense = Expense::where('user_id', Auth::id())
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->sum('amount');
 
-        // Kategorien
-        $categories = Category::all();
+        // Kategorien für Einnahmen und Ausgaben separat abrufen
+        $incomeCategories = Category::where('type', 'income')->get();
+        $expenseCategories = Category::where('type', 'expense')->get();
 
         // Einnahmen und Ausgaben abrufen
         $recentIncomes = Income::where('user_id', Auth::id())
@@ -49,11 +46,21 @@ class DashboardController extends Controller
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->get();
 
-        // Letzte Transaktionen kombinieren
+        // Letzte Transaktionen kombinieren und nach Datum sortieren
         $transactions = $recentIncomes->merge($recentExpenses)->sortByDesc('date');
 
-        return view('dashboard', compact('transactions', 'totalIncome', 'totalExpense', 'categories', 'recentIncomes', 'recentExpenses'));
+        // An die Blade-Vorlage übergeben
+        return view('dashboard', compact(
+            'transactions',
+            'totalIncome',
+            'totalExpense',
+            'incomeCategories',
+            'expenseCategories',
+            'recentIncomes',
+            'recentExpenses'
+        ));
     }
+
 
     public function checkNotifications()
     {

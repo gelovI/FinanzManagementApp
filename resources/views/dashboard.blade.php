@@ -48,12 +48,12 @@
 
                     <!-- Formular für Einnahmen -->
                     <div x-show="showIncomeForm" class="mt-6" x-cloak>
-                        @include('incomes.create', ['categories' => $categories])
+                        @include('incomes.create', ['categories' => $incomeCategories])
                     </div>
 
                     <!-- Formular für Ausgaben -->
                     <div x-show="showExpenseForm" class="mt-6" x-cloak>
-                        @include('expenses.create', ['categories' => $categories])
+                        @include('expenses.create', ['categories' => $expenseCategories])
                     </div>
                 </div>
             </div>
