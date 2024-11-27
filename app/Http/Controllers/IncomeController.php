@@ -53,7 +53,7 @@ class IncomeController extends Controller
 
         $income->update($request->all());
 
-        return redirect()->back()->with('success', 'Einnahme erfolgreich aktualisiert!');
+        return redirect()->route('reports.index')->with('success', 'Einnahme erfolgreich aktualisiert.');
     }
 
     public function edit($id)

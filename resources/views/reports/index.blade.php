@@ -171,8 +171,8 @@
                                     <input type="text" name="description" value="{{ $expense->description }}" class="w-full border rounded px-2 py-1">
                                 </td>
                                 <td class="px-6 py-4 text-sm flex space-x-2">
-                                    <button type="submit" class="text-green-600 hover:underline">Speichern</button>
-                                    <button type="button" @click="editingId = null" class="text-gray-600 hover:underline">Abbrechen</button>
+                                    <button type="submit" class="bg-green-300 hover:bg-green-500 rounded text-base text-white p-2">Speichern</button>
+                                    <button type="button" @click="editingId = null" class="bg-blue-300 hover:bg-blue-500 rounded text-base text-white p-2">Abbrechen</button>
                                 </td>
                             </form>
                         </tr>

@@ -54,6 +54,6 @@ class ExpenseController extends Controller
 
         $expense->update($request->all());
 
-        return redirect()->back()->with('success', 'Einnahme erfolgreich aktualisiert!');
+        return redirect()->route('reports.index')->with('success', 'Ausgabe erfolgreich aktualisiert.');
     }
 }
