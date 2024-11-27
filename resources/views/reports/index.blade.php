@@ -11,13 +11,13 @@
             <div class="flex space-x-4 mb-6">
                 <button
                     @click="activeTab = 'income'; editingId = null"
-                    :class="activeTab === 'income' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
+                    :class="activeTab === 'income' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-800'"
                     class="px-4 py-2 rounded">
                     Einnahmen
                 </button>
                 <button
                     @click="activeTab = 'expense'; editingId = null"
-                    :class="activeTab === 'expense' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
+                    :class="activeTab === 'expense' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'"
                     class="px-4 py-2 rounded">
                     Ausgaben
                 </button>
