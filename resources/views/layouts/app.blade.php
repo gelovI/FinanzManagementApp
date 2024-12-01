@@ -35,6 +35,23 @@
             {{ $slot }}
         </main>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('pdf-modal', () => ({
+                showModal: false,
+                pdfSrc: '',
+                openModal(src) {
+                    this.pdfSrc = src;
+                    this.showModal = true;
+                },
+                closeModal() {
+                    this.showModal = false;
+                    this.pdfSrc = '';
+                }
+            }));
+        });
+    </script>
 </body>
 
 </html>

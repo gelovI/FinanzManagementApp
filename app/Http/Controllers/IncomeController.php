@@ -65,6 +65,6 @@ class IncomeController extends Controller
     public function destroy(Income $income)
     {
         $income->delete();
-        return redirect()->route('incomes.index')->with('success', 'Einnahme erfolgreich gelöscht.');
+        return redirect()->route('reports.index')->with('success', 'Einnahme erfolgreich gelöscht.');
     }
 }

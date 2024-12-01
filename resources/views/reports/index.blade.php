@@ -111,16 +111,22 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategorie</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Betrag (€)</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Beschreibung</th>
+                            <th class="px-6 py-3 text-centered text-xs font-medium text-gray-500 uppercase">Rechnungen</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($expenses as $expense)
                         <tr x-show="editingId !== {{ $expense->id }}" class="bg-white border-b">
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($expense->date)->format('d.m.Y') }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $expense->category->name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">€ {{ number_format($expense->amount, 2) }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $expense->description }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 align-middle">{{ \Carbon\Carbon::parse($expense->date)->format('d.m.Y') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 align-middle">{{ $expense->category->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 align-middle">€ {{ number_format($expense->amount, 2) }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 align-middle">{{ $expense->description }}</td>
+                            <td class="px-6 py-4 text-sm text-center align-middle">
+                                @if ($expense->document)
+                                @include('reports.partials.pdf-modal', ['pdfPath' => $expense->document])
+                                @endif  
+                            </td>
                             <td class="px-6 py-4 text-sm flex space-x-2">
                                 <!-- Bearbeiten Button -->
                                 <button @click="editingId = {{ $expense->id }}" class="text-blue-600 hover:underline">

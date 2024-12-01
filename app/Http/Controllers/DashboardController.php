@@ -15,49 +15,52 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Gesamteinnahmen und -ausgaben berechnen
-        $totalIncome = Income::where('user_id', Auth::id())->sum('amount');
-        $totalExpense = Expense::where('user_id', Auth::id())->sum('amount');
-
         // Filter für Tage
         $filterDays = $request->get('filter');
         $queryDate = $filterDays ? now()->subDays($filterDays) : null;
 
-        // Gesamteinnahmen basierend auf dem Filterdatum
+        // Gesamteinnahmen und -ausgaben
         $totalIncome = Income::where('user_id', Auth::id())
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->sum('amount');
 
-        // Gesamtausgaben basierend auf dem Filterdatum
         $totalExpense = Expense::where('user_id', Auth::id())
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->sum('amount');
 
-        // Kategorien für Einnahmen und Ausgaben separat abrufen
+        // Kategorien für Einnahmen und Ausgaben
         $incomeCategories = Category::where('type', 'income')->get();
         $expenseCategories = Category::where('type', 'expense')->get();
 
         // Einnahmen und Ausgaben abrufen
-        $recentIncomes = Income::where('user_id', Auth::id())
+        $recentIncomes = Income::with('category')
+            ->where('user_id', Auth::id())
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->get();
 
-        $recentExpenses = Expense::where('user_id', Auth::id())
+        $recentExpenses = Expense::with('category')
+            ->where('user_id', Auth::id())
             ->when($queryDate, fn($query) => $query->where('date', '>=', $queryDate))
             ->get();
 
-        // Letzte Transaktionen kombinieren und nach Datum sortieren
+        // Rechnungen hinzufügen
+        $recentExpenses->each(function ($expense) {
+            $expense->hasDocument = !empty($expense->document);
+        });
+
+        // Typ zur Unterscheidung hinzufügen
+        $recentIncomes->map(fn($income) => $income->type = 'income');
+        $recentExpenses->map(fn($expense) => $expense->type = 'expense');
+
+        // Letzte Transaktionen kombinieren und sortieren
         $transactions = $recentIncomes->merge($recentExpenses)->sortByDesc('date');
 
-        // An die Blade-Vorlage übergeben
         return view('dashboard', compact(
             'transactions',
             'totalIncome',
             'totalExpense',
             'incomeCategories',
-            'expenseCategories',
-            'recentIncomes',
-            'recentExpenses'
+            'expenseCategories'
         ));
     }
 

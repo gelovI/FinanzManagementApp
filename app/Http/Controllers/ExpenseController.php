@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Expense;
 use App\Models\Category;
 
@@ -30,7 +31,15 @@ class ExpenseController extends Controller
             'category_id' => 'required|exists:categories,id',
             'date' => 'required|date',
             'description' => 'nullable|string|max:255',
+            'document' => 'nullable|file|mimes:pdf|max:2048',
         ]);
+
+        // Falls eine Datei hochgeladen wird
+        $documentPath = null;
+        if ($request->hasFile('document')) {
+            // Datei speichern und den Pfad erhalten
+            $documentPath = $request->file('document')->store('documents', 'public');
+        }
 
         Expense::create([
             'amount' => $request->amount,
@@ -38,6 +47,7 @@ class ExpenseController extends Controller
             'user_id' => Auth::id(),
             'date' => $request->date,
             'description' => $request->description,
+            'document' => $documentPath,
         ]);
 
         return redirect()->route('dashboard.transactions')->with('success', 'Ausgabe erfolgreich erstellt.');
@@ -46,14 +56,40 @@ class ExpenseController extends Controller
     public function update(Request $request, Expense $expense)
     {
         $request->validate([
-            'date' => 'required|date',
-            'category_id' => 'required|exists:categories,id',
             'amount' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'date' => 'required|date',
             'description' => 'nullable|string|max:255',
+            'document' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        $expense->update($request->all());
+        // Datei aktualisieren
+        $documentPath = $expense->document;
+        if ($request->hasFile('document')) {
+            // Alte Datei löschen, falls vorhanden
+            if ($documentPath) {
+                Storage::disk('public')->delete($documentPath);
+            }
 
-        return redirect()->route('reports.index')->with('success', 'Ausgabe erfolgreich aktualisiert.');
+            // Neue Datei speichern
+            $documentPath = $request->file('document')->store('documents', 'public');
+        }
+
+        // Datensatz aktualisieren
+        $expense->update([
+            'amount' => $request->amount,
+            'category_id' => $request->category_id,
+            'date' => $request->date,
+            'description' => $request->description,
+            'document' => $documentPath,
+        ]);
+
+        return redirect()->route('dashboard.transactions')->with('success', 'Ausgabe erfolgreich aktualisiert.');
+    }
+
+    public function destroy(Expense $expense)
+    {
+        $expense->delete();
+        return redirect()->route('reports.index')->with('success', 'Ausgabe erfolgreich gelöscht.');
     }
 }
